@@ -1,0 +1,179 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>My Tic Tac Toe Game</title>
+<style>
+body {
+    background-color: lightblue;
+}
+p {
+    font-family: verdana;
+    font-size: 18px;
+}
+form {
+    font-family: verdana;
+    font-size: 16px;
+}
+.box {
+    background-color: #fff;
+    border: #555;
+    border-width: 2px;
+    width: 50px;
+    height: 50px;
+    font-size: 36px;
+    align-content: center;
+    display: inline-block;
+    padding: 10px;
+    margin: 10px;
+    text-align: center;
+    font-family: "Arial Black";
+    vertical-align: middle;
+}
+.box:hover {
+    background-color: coral;
+}
+#results {
+    font-family: Impact, Haettenschweiler, "Franklin Gothic Bold", "Arial Black", "sans-serif";
+    font-size: 36px;
+	visibility: hidden;
+}
+.reset {
+	border: #555;
+    border-width: 2px;
+    width: 150px;
+    height: 20px;padding: 10px;font-family: Impact, Haettenschweiler, "Franklin Gothic Bold", "Arial Black", "sans-serif";
+    font-size: 24px;text-align: center;vertical-align: middle;
+}
+.reset:hover {background-color: #B66264;}
+</style>
+<script>
+// Global variables
+	var currentPlayer, Result, winner="", GameOverDude;
+	var GameArray=[];
+	var rowMax = 3;  // I can do anysize board!!
+	var colMax = rowMax;
+		
+	function startupScript(){
+		currentPlayer = "O"; 					//initialize variables and draw the board
+		for (row=0; row < rowMax; row++) {  	//step through rows
+ 			GameArray[row] = new Array();
+ 			for (col=0; col < colMax; col++) {
+  				GameArray[row][col] = "";
+ 			}
+		}
+		drawBoard();
+	}
+	
+	function checkRows(){
+		NumRows = GameArray.length; 				//step through rows
+		for (k=0; k < NumRows && !winner; k++){ 	//step through columns
+			NumCols=GameArray[k].length
+			firstBox = GameArray[k][0];
+			for (i=1 ; i < NumCols; i++){
+				//console.log("Checking: R" + k + " C" + i + " - firstBox:" + firstBox + " and " + GameArray[k][i]);
+				//the first term is so we do NOT check for empty boxes
+				if (GameArray[k][i] && firstBox == GameArray[k][i]) {   
+					winner = currentPlayer;
+				} else {winner = '';break;}
+			}
+		}
+		if (winner) {return winner;}
+	}
+	
+	function checkColumns(){
+		NumCols = GameArray.length;  				//step through columns
+		for (k=0; k < NumCols && !winner; k++){  	//step through rows
+			NumRows=GameArray[k].length
+			firstBox = GameArray[0][k];
+			for (i=1 ; i < NumRows; i++){
+				if (GameArray[i][k] && firstBox == GameArray[i][k]) {
+					winner = currentPlayer;
+				} else {winner = '';break;}
+			}
+		}
+		if (winner) {return winner;}
+	}
+	
+	function checkDiagonals(){
+		NumCols = GameArray.length;  				
+		firstBox1 = GameArray[0][0];
+		for (k=1; k < NumCols; k++){  	//step through rows & cols
+			if (firstBox1 == GameArray[k][k]) {
+				if (GameArray[k][k]) {winner = currentPlayer;}
+			} else 
+				{winner = '';break;}
+		}
+		if (winner) {return winner;}
+		
+		//the other direction now
+		NumRows=GameArray[0].length;
+		firstBox2 = GameArray[0][NumRows-1];
+		for (c=NumRows-2,j=1; c >= 0, j<NumRows; c--,j++){  	//step through rows & cols
+			if (firstBox2 == GameArray[j][c]) {
+					if (GameArray[j][c]) {winner = currentPlayer;}
+				} else 
+					{winner = '';break;}
+		}
+		if (winner) {return winner;}				
+	}
+	
+	function checkForWinner(){
+		checkRows()
+		if (winner) endGame()
+		checkColumns() 
+		if (winner) endGame()
+		checkDiagonals() 
+		if (winner) endGame()
+	}
+	
+	function endGame() {
+		result = document.getElementById("results");
+		result.innerHTML = "Result: Player " + winner + " Wins!!";
+		document.getElementById("results").style.visibility="visible";
+	}
+	
+	function setBox(newk,newi){
+		//console.log("setting to: " + currentPlayer);
+		boxID="boxNum" + newk + newi;
+		currBoxValue = document.getElementById(boxID).innerHTML
+		if (currentPlayer=="X" && currBoxValue != "O"){
+			GameArray[newk][newi]="X";
+			checkForWinner(); //check for winner before I switch players
+			currentPlayer="O"; 
+			
+		} else if (currentPlayer=="O" && currBoxValue != "X") {
+			GameArray[newk][newi]="O";
+			checkForWinner(); //check for winner before I switch players
+			currentPlayer="X";
+		}
+		document.getElementById(boxID).innerHTML = GameArray[newk][newi];
+		document.getElementById("player").innerHTML= "Player Turn: " + currentPlayer;
+	}
+	
+	function drawBoard(){
+		k=0
+		do 
+		{	 
+		for (i=0;i<3;i++) {
+			document.write("<div class='box' onClick=setBox(" + k + "," + i + ") id='boxNum"+k+i+"'>" + GameArray[k][i] + "</div>");
+		}
+		document.write("<br>");
+		k++
+		} while (k<3)
+	}
+</script>
+</head>
+
+<body>
+<h1>Tic Tac Toe</h1>
+<div id="player">Player Turn:</div><br>
+<div id="results">Result: Player _ Wins!!</div>
+<br>
+<br>
+<script>
+		startupScript();		
+</script>
+<div class="reset" onlcick="startupScript">Reset Game</div>
+</body>
+</html>
