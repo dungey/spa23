@@ -36,10 +36,16 @@ form {
 
 <script>
 	var taxrate = .0625, subtotal=0.00;
-	var itemList ("hotDog", "French", "Soda", "Kraut");
+	var cartItems =[];
+	cartItems["hotDog"] = 0;
+	cartItems["French"] = 0;
+	cartItems["Soda"] = 0;
+	cartItems["Kraut"] = 0;
+	
+	var itemCnt (0,0,0,0);
 	var priceList(4.00,3.50,1.50,1.00)
 	function addItem() {
-		let text;
+		let text, cartText;
 		let item = prompt ("Which item to you want to add? Please enter a # from the menu:")
 		if (item==null || iteem ==""){
 			itemAMt=0.00;
@@ -53,10 +59,12 @@ form {
 		}
 		subtotal+=itemAMt;
 		
-		document.getElementbyId("itemlist").innerHTML="(" + numHotdog + ") Hotdogs(s)";
-		document.getElementbyId("itemlist").innerHTML="(" + numFF + ") French Fries";
-		document.getElementbyId("itemlist").innerHTML="(" + numSoda + ") Soda";
-		document.getElementbyId("itemlist").innerHTML="(" + numKraut + ") Sauerkraut";
+		for (key in cartItems) {
+			cartText = document.getElementbyId(cartItems[key]).innerHTML;
+			document.getElementbyId("itemlist").innerHTML=cartText + "(" + cartItems[key] + ") " +key + ": "(cartItems[key] * priceList(cartItems[key])) + " </br>";
+			
+		}
+		
 		document.getElementbyId("itemlist").style.visibility="visible";
 	}
 	function showCart(){
