@@ -1,0 +1,118 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Joe's Hotdogs</title>
+<style>
+body {
+    background-color: lightblue;
+}
+p {
+    font-family: verdana;
+    font-size: 18px;
+}
+form {
+    font-family: verdana;
+    font-size: 16px;
+    width: auto;
+}
+	#menuList {
+    background-color: #fff;
+    border: #555;
+    border-width: 2px;
+    width: 150px;
+    height: 70px;
+    font-size: 12px;
+    display: inline-block;
+    padding: 10px;
+    margin: 10px;
+    font-family: "Arial Black";
+    vertical-align: middle;
+}
+	#Receipt {visibility: hidden;}
+	#thankyou{visibility: hidden;}
+
+</style>
+
+<script>
+	var taxrate = .0625, subtotal=0.00;
+	var itemList ("hotDog", "French", "Soda", "Kraut");
+	var priceList(4.00,3.50,1.50,1.00)
+	function addItem() {
+		let text;
+		let item = prompt ("Which item to you want to add? Please enter a # from the menu:")
+		if (item==null || iteem ==""){
+			itemAMt=0.00;
+		} else {
+			switch(item) {
+				case 1: itemAmt=4.00;break;
+				case 2: itemAmt=3.50;break;
+				case 3: itemAmt=1.50;break;
+				case 4: itemAmt=1.00;
+			}
+		}
+		subtotal+=itemAMt;
+		
+		document.getElementbyId("itemlist").innerHTML="(" + numHotdog + ") Hotdogs(s)";
+		document.getElementbyId("itemlist").innerHTML="(" + numFF + ") French Fries";
+		document.getElementbyId("itemlist").innerHTML="(" + numSoda + ") Soda";
+		document.getElementbyId("itemlist").innerHTML="(" + numKraut + ") Sauerkraut";
+		document.getElementbyId("itemlist").style.visibility="visible";
+	}
+	function showCart(){
+		document.getElementById("cart").style.visibility = "visible";
+		
+	}
+	function checkOut(){
+		document.getElementById("cart").style.visibility = "hidden";
+		document.getElementById("thankyou").style.visibility = "visible";
+		subtotal=0.00;
+	}
+	function writeBill(){
+		discount = (subtotal>20.00)?subtotal*0.1:0.0;
+		tax = (subtotal-discount)*.0625;
+		total=(subtotal-discount)+tax;
+		document.getElementById("subtotal").innerHTML= "Subtotal: " + subtotal;
+		document.getElementById("discount").innerHTML= "Discount: " + discount;
+		document.getElementById("tax").innerHTML= "Tax: " + tax;
+		document.getElementById("total").innerHTML= "Total: " + (subtotal-discount+tax-discount);
+		if (discount>20.00) {
+			document.getElementById("discount").style.visibility="visible";}
+		document.getElementById("Receipt").style.visibility="visible";				
+	}
+	</script>
+</head>
+
+<body>
+<h2>Joe's Hotdogs</h2>
+<p>Please place an order:</p>
+
+
+<form>
+  <button onclick="addItem()">Add Item</button> <button onclick="showCart()">Show Cart</button> <button onClick="checkOut()">Check out</button>
+	
+  <h3>Menu Items:</h3>
+  
+  
+  <div id="menuList">1. Hotdog: $4.00</br>
+	  2. French Fries: $3.50</br>
+	3. Soda:$1.50</br>
+	4. Sauerkraut: $1.00</br>
+</div>
+<div id="Receipt">
+<h2 id="cart">Your Cart</h2>
+	<div id="itemlist"></div>
+	<div id="bill">
+		<div id="subtotal"></div>
+		<div id="discount"></div>
+		<div id="tax"></div>
+		<div id="total"></div>
+	</div>
+</div>
+<div id="thankyou">
+<h4>Thank you for your order!</h2>
+</div>
+  
+</form><br><br>
+</body>
+</html>
