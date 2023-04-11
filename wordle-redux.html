@@ -1,0 +1,528 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="https://unpkg.com/react@16.7.0/umd/react.development.js"></script> 
+<script src="https://unpkg.com/react-dom@16.7.0/umd/react-dom.development.js"></script>
+<title>David's Wordle-redux</title>
+<style>
+h1 {
+    text-align: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 48px;
+}
+body {
+    background-color: lightblue;
+    align-content: center;
+}
+.gameover {
+    z-index: 15;
+}
+.answerWord {
+    visibility: hidden;
+}
+.metrics{
+	display:inline-block;
+}
+	
+form {
+    font-family: verdana;
+    font-size: 16px;
+}
+.box {
+    background-color: #fff;
+    border: #555;
+    border-width: 2px;
+    width: 50px;
+    height: 50px;
+    font-size: 36px;
+    align-content: center;
+    display: inline-block;
+    padding: 10px;
+    margin: 10px;
+    text-align: center;
+    font-family: "Arial Black";
+    vertical-align: middle;
+}
+.box:hover {
+    background-color: coral;
+}
+/*ul li {
+    list-style-type: none;
+	background-color: #fff;
+    border: #555;
+    border-width: 2px;
+    width: 48px;
+    height: 50px;
+    font-size: 36px;
+    align-content: center;
+    display: inline-block;
+    padding: 10px;
+    margin: 10px;
+    text-align: center;
+    font-family: "Arial Black";
+    vertical-align: middle;
+}*/
+ol li {
+    list-style-type: none;
+    background-color: #fff;
+    border: #555;
+    border-width: 2px;
+    width: 80px;
+    height: 80px;
+    font-size: 56px;
+    align-content: center;
+    display: inline-block;
+    padding: 10px;
+    margin: 10px;
+    text-align: center;
+    font-family: "Arial Black";
+    vertical-align: middle;
+}
+ul li {
+    list-style-type: none;
+    border-radius: 10px;
+    border: 2px solid #000;
+    font-size: 28px;
+    background-color: #73AD21;
+    border-width: 3px;
+    width: 33px;
+    height: 43px;
+    align-content: center;
+    display: inline-block;
+    padding: 7px;
+    margin: 7px;
+    text-align: center;
+    font-family: "Arial Black";
+    vertical-align: middle;
+    color: #fff;
+    align-items: center;
+}
+.key {
+    border-radius: 10px;
+    border: 2px solid #000;
+    font-size: 28px;
+    background-color: #73AD21;
+    border-width: 3px;
+    width: 35px;
+    height: 45px;
+    align-content: center;
+    display: inline-block;
+    padding: 7px;
+    margin: 7px;
+    text-align: center;
+    font-family: "Arial Black";
+    vertical-align: middle;
+    color: #fff;
+    align-items: center;
+}
+.keyboard {
+    display: inline-block;
+    align-content: center;
+}
+.results {
+    font-family: Impact, Haettenschweiler, "Franklin Gothic Bold", "Arial Black", "sans-serif";
+    font-size: 36px;
+    visibility: hidden;
+    position: absolute;
+    width: 100%;
+    height: 900px;
+    text-align: center;
+    top: 1%;
+    left: 0px;
+    background-color: #fff;
+    z-index: 10;
+    border-radius: 10px;
+    border: 2px solid #009938;
+}
+.container {
+    width: 700px;
+    height: 1200;
+    position: relative;
+    margin: 30px;
+    align-content: center;
+}
+.Overbox {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: .5;
+    background: #0057e3;
+}
+.overlay {
+    z-index: 9;
+    margin: 30px;
+    background: #009938;
+}
+.reset {
+    border-width: 2px;
+    border-radius: 10px;
+    border: 2px solid #000;
+    width: 200px;
+    height: 60px;
+    margin-left: 5px;
+    margin-top: 20px;
+    padding: 15px;
+    font-family: Impact, Haettenschweiler, "Franklin Gothic Bold", "Arial Black", "sans-serif";
+    font-size: 24px;
+    text-align: center;
+    color: aliceblue;
+    vertical-align: middle;
+    z-index: 10;
+    background-color: #237;
+}
+.reset:hover {
+    border-width: 5px;
+    background-color: #B66264;
+}
+</style>
+<script>
+////////////////////////////////////////////
+//
+// Using object to creat my wordle board
+//
+///////////////////////////////////////////
+
+/*--------------------------------------------*/	
+//  global variables
+var board = [];
+var currentRow = 0; 		
+var currBox = 0;
+var theWord = "MOODY";
+var myWord = "";
+var gameOver = false;
+var wins = 0;
+var loses = 0
+var letters = [];
+/*--------------------------------------------*/
+/*------------ statistics object -------------*/
+function Statistics() {
+	this.games = [];
+	
+	this.countWins = function() {this.games.forEach(new gameObj(answer,outcome,tries,used));};
+	this.countLoss = function() {this.games.push(new gameObj(answer,outcome,tries,used));};
+	this.addGame = function(color,value,id) {this.games.push(new gameObj(answer,outcome,tries,used));};
+}
+function gameObj(answer,outcome,tries,used) {
+	this.answer = answer;
+	this.outcome = outcome;
+	this.tries = tries;
+	this.used = used;
+}
+/*-----------------box object ----------------*/	
+function boxObj(color, currValue, id) {
+  		this.color = color;
+  		this.currValue = currValue;
+  		this.id = id;
+  		this.print = function() {
+    		return this.color + " " + this.currValue;
+  		};
+	}
+/*---------------- row object ----------------*/	
+function row(rownumber) {
+  		this.rowNum = rownumber;
+		this.boxes = [];
+  		this.addBox = function(color,value,id) {
+    		this.boxes.push(new boxObj(color,value,id));
+  		};
+		this.print = function(boxID) {
+    		return this.boxes[boxID].color;
+  		}
+	};
+/*--------------------------------------------*/	
+function startupScript(){
+	//initialize variables and draw the board
+	currentRow = 0; 		
+	currBox=0;
+	//hide the Gameover if visible
+	document.getElementById("resultsDiv").style.visibility="hidden";
+		
+	for (i=0; i<= 5 ;i++) {  //creating 6 rows
+		board.push(new row(i));
+		//board[0].addBox("white","-",i);
+		//document.getElementById("test").innerHTML = board[0].boxes[0].color;
+		for (j=0; j<=4; j++) { //creating the 5 boxes in each row
+			board[i].addBox("white"," ", (10*i)+j);
+			//board.row[i].boxes[j].addBox("white", "-", i);
+		}
+	}
+	
+			
+	document.addEventListener('keydown', function(event) {
+		var KeyID = event.keyCode;
+		let keyChar = String.fromCharCode(KeyID);
+   		//console.log(KeyID);
+		switch(KeyID)
+   		{
+		  case 8:  // backspace
+			  console.log("backspace");
+			  (currBox>0)?currBox--:currBox=0;
+			  boxID = "boxNum" + (10*currentRow +currBox);
+			  console.log("boxID(backspace): " + boxID);
+			  document.getElementById(boxID).innerHTML = " ";
+			break; 
+		  case 46:  // delete
+			  console.log("delete");
+			  (currBox>0)?currBox--:currBox=0;
+			  boxID = "boxNum" + (10*currentRow +currBox);
+			  console.log("boxID(delete): " + boxID);
+			  document.getElementById(boxID).innerHTML = " ";
+			  break;
+		  case 13:  //return
+			  //boxID = "boxNum" + (10*currentRow +currBox);
+			  //for (i=0; i<= 5 ;i++){letters.push(board.row[currentRow].boxes[i].currValue)
+			  checkWord();
+			  if (currentRow<5) currentRow++;
+			  console.log("new currentRow: " + currentRow);
+			  currBox=0;
+			  break;
+		  default:
+			  boxID = "boxNum" + (10*currentRow +currBox);
+			  console.log("boxID(default): " + boxID);
+			  if (currBox<5) {
+				  	console.log("currBox(default): " + currBox);
+			  		console.log("currentRow(default): " + currentRow);
+			  		document.getElementById(boxID).innerHTML = keyChar;
+			  		board[currentRow].boxes[currBox].currValue = keyChar;
+				    console.log("keycahr: "+keyChar);
+				    console.log("board[cR].boxes[cB].cV: "+board[currentRow].boxes[currBox].currValue);
+			  		currBox++;
+			  }
+		  	  break;
+	   	}
+	});
+	
+	//drawBoard2(board);
+	drawBoard3();      /// Using React
+	/// draw the keybaord
+	//keyarray.forEach(writeKey);    ///doing via React instead
+
+	//GetnewWord();
+	document.getElementById("answerWord").innerHTML = theWord;
+	//updateStats();
+
+	/// Making the board in ReactJS ///
+	var newBoardArray = [];
+	for (j=0; j<=5; j++){
+		for (i=0; i<5; i++)
+			newBoardArray.push("boxNum"+ (10*j+i))
+	}
+	for (j=0; j<=5; j++){
+		var theRABoard = React.createElement("ol", {name:"boxes"},
+			newBoardArray.map((site, i) =>React.createElement("li",{key:i, id:site},""))
+		);
+	}
+	ReactDOM.render(theRABoard, myRA_board);	
+
+	/// Making the keys in ReactJS ///
+	var thekeys2 = 'QWERTYUIOPASDFGHJKLZXCVBNM';
+	var keyarray2 = thekeys2.split('');
+	console.log(keyarray2);
+	var theRAkeys = React.createElement("ul", {name:"boxes"},
+			keyarray2.map((site, i) =>React.createElement("li",{key:i},site))
+		);
+	ReactDOM.render(theRAkeys, myRA_keys); 
+}
+
+/*--------------------------------------------*/
+function endGame() {
+		document.getElementById("resultsDiv").style.visibility="visible";
+		gameOver = true;
+}
+	
+/*--------------------------------------------*/
+function reset() {
+	document.getElementById("turns").innerHTML="Turns Left: 6";
+	//board = [];
+	currentRow = 0; 		
+	currBox = 0;
+	//GetnewWord();
+	myWord = "";
+	gameOver = false;
+	for (i=0; i<= 5 ;i++) {  //clear board
+		for (j=0; j<=4; j++) { 
+			boxID = "boxNum" + (10*i +j); 
+			document.getElementById(boxID).innerHTML = "";
+			document.getElementById(boxID).style.backgroundColor = "white";
+		}
+	}
+}
+	
+/*--------------------------------------------*/
+	
+function drawBoard2(theBoard){ 
+	//
+	for (a_row in theBoard)
+		{
+		console.log(a_row);
+		for (i=0;i<=4;i++){
+			
+			document.write("<div class='box' onClick=setBox2(" + board[a_row].boxes[i].id + ") id='boxNum"+board[a_row].boxes[i].id+"'>" + board[a_row].boxes[i].currValue + "</div>");
+			document.getElementById("boxNum"+board[a_row].boxes[i].id).style.backgroundColor=board[a_row].boxes[i].color;
+    
+		}
+		document.write("<br>")
+	}
+	document.write("<br>");
+	
+	
+		
+}
+
+function drawBoard3(){    // doing the drawBoard  in ReactJS
+	// using react
+	document.write("<div id='myRA_board'></div>");
+	document.write("<div id='myRA_keys'></div>");
+	document.write("<br><br>");
+}
+	
+	
+/*-------------------------------------------------*/
+	
+/*---- This api is from RapidAPI but I found       */
+/*---- that some words are not in their dictionary */
+/*---- like, "media" and "where".                  */
+	
+function checkWord() {	
+	const data = null;
+	let matches = 0;
+	const xhr = new XMLHttpRequest();
+	xhr.withCredentials = true;
+
+	xhr.addEventListener("readystatechange", function () {
+		if (this.readyState === this.DONE) {
+			console.log(this.responseText);
+		}
+	});
+    
+	for (i=0;i<5;i++){myWord += board[currentRow].boxes[i].currValue;}    // build a string of the values to send to API.
+	console.log("theWord: " + myWord);
+	console.log("currentRow(checkword): " + currentRow);
+	console.log("boxID(checkword): " + boxID);
+	/*xhr.open("GET", "https://twinword-word-graph-dictionary.p.rapidapi.com/association/?entry=" + myWord);
+	xhr.setRequestHeader("X-RapidAPI-Key", "6c2423a48cmsh98732c023c60672p198b0ajsna3c1e48e6c7a");
+	xhr.setRequestHeader("X-RapidAPI-Host", "twinword-word-graph-dictionary.p.rapidapi.com");
+
+	xhr.send(data);*/
+	
+	for (i=0;i<5;i++){
+		boxID = "boxNum" + (10*currentRow + i); 			// i is the currBox
+		console.log("boxNum: " + boxID);
+		if (board[currentRow].boxes[i].currValue == theWord.charAt(i) )  {//is a match
+			document.getElementById(boxID).style.backgroundColor = "green";
+			board[currentRow].boxes[i].color = "green";
+			matches++;
+			console.log("letter and place match!");
+			
+			}
+		else if (theWord.indexOf(board[currentRow].boxes[i].currValue) > 0) {//is in the word
+			document.getElementById(boxID).style.backgroundColor = "yellow";
+			board[currentRow].boxes[i].color = "yellow";
+			console.log("letter wrong place");
+			}
+		else { //is not in the word
+			document.getElementById(boxID).style.backgroundColor = "gray";
+			board[currentRow].boxes[i].color = "gray";
+			console.log("letter not there");
+			}
+		}
+	if (matches==5) endGame();
+	if (matches<5) {
+		document.getElementById("turns").innerHTML="Turns Left: "+(5-currentRow);
+		
+	
+			
+            var s = new Set();
+            var n = myWord.length;
+        	// HashSet doesn't allow repetition of elements
+        	for (var i = 0;i<n;i++)
+            	s.add(myWord[i]);
+ 
+        	// Print content of the set
+        	for (const v of s) {
+ 
+            	letters.push(v);
+    		}
+			
+		
+		document.getElementById("used").innerHTML=letters;
+	}
+}
+/*--------------------------------------------*/	
+function newWord(){
+	const data = null;
+
+	const xhr = new XMLHttpRequest();
+	xhr.withCredentials = true;
+
+	xhr.addEventListener("readystatechange", function () {
+		if (this.readyState === this.DONE) {
+			console.log(this.responseText);
+		}
+	});
+
+	xhr.open("GET", "https://wordle-creator-tools.p.rapidapi.com/new-word?wordlength=5");
+	xhr.setRequestHeader("X-RapidAPI-Key", "6c2423a48cmsh98732c023c60672p198b0ajsna3c1e48e6c7a");
+	xhr.setRequestHeader("X-RapidAPI-Host", "wordle-creator-tools.p.rapidapi.com");
+
+	xhr.send(data);
+}
+	
+/*--------------------------------------------*/
+	
+var thekeys = 'QWERTYUIOPASDFGHJKLZXCVBNM';
+var keyarray = thekeys.split('');
+//console.log(keyarray);
+	
+function writeKey(key){
+	document.write("<div class='key' onClick='keyPress(" + key + ")'>" + key + "</div>" );
+	if (key == "P" || key=="L") 
+		document.write("<br>");
+}
+
+document.write("<div id='keyboard'>");
+document.write("</div>");
+	
+/*--------------------------------------------*/
+function toggleDebug(){
+	let vis = document.getElementById("answerWord").style.visibility;
+	console.log("vis1:"+vis);
+	(vis=="hidden")?vis="visible":vis="hidden";
+	console.log("vis2:"+vis);
+	document.getElementById("answerWord").style.visibility=vis;
+}
+	
+</script>
+</head>
+
+<body>
+<h1>David's Wordle</h1>
+<div class="metrics">
+  <div id="turns">Turns Left: 6</div>
+	<div>Letters used: <div id="used"></div></div>
+  <div id="debug">
+    <button id="debugbutton" onClick="toggleDebug()">Debug</button>
+    <div class="answerWord" style="visibility: hidden" id="answerWord"></div>
+  </div>
+</div>
+<br>
+<div class="container">
+  <div class="results" id="resultsDiv"><br>
+    Result: You Won!!
+    <p class="gameover"><img src="wordle-game-over.jpeg" width="533" height="300" alt=""/></p>
+    <p id="wins">You have X win(s):</p>
+    <div id="winNum">wins</div>
+    <button class="reset" id="reset2" onClick="reset()">New Game</button>
+  </div>
+  <div> 
+    <script>
+startupScript();
+</script> 
+    
+  </div>
+  <button class="reset" id="reset1" onClick="reset()">New Game</button>
+</div>
+</body>
+</html>
