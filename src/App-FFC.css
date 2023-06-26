@@ -1,0 +1,325 @@
+@charset "UTF-8";
+/* CSS Document */
+
+/* styles by TAG */
+
+h1 {
+    text-align: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 48px;
+}
+h5 {
+    text-align: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 16px;
+	padding: 0px 0px
+}
+h6 {
+    text-align: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    text-decoration: none;
+	font-size: 16px;
+	padding: 0px 0px
+}
+
+body {
+    background-color: lightblue;
+    align-content: center;
+}
+form {
+    font-family: verdana;
+    font-size: 24px;
+}
+select {
+  width: 25%;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  background-color: #f1f1f1;
+	font-family: verdana;
+    font-size: 24px;
+}
+input {
+		font-size: 24px;
+	}
+
+ul li {
+    list-style-type: none;
+    border-radius: 7px;
+    border: 2px solid #000;
+    font-size: 14px;
+    background-color: #1E70AB;
+    border-width: 2px;
+    width: 65px;
+    height: 20px;
+    align-content: center;
+    display: inline-block;
+    padding: 3px;
+    margin: 3px;
+    text-align: center;
+    font-family: "Arial Black";
+    vertical-align: middle;
+    color: #fff;
+    align-items: center;
+}
+
+/* styles by ID */
+
+#myapp {
+	z-index: 3;
+	}
+#header {
+    visibility: visible;
+    border: none;
+    align-content: center;
+    display: inline-block;
+    text-align: center;
+    font-family: "Arial Black";
+    vertical-align: middle;
+	position: absolute;
+	left: 0px;
+  	top: 0px;
+	z-index: 2;
+	}
+#bkg {
+    position: absolute;
+  	left: 0px;
+  	top: 17px;
+	display: block;
+    visibility: visible;
+    z-index: 0;
+	}
+
+#LoginPage {
+    font-size: 36px;
+	color: #fff;
+	text-shadow: 2px 2px 4px #000000;
+    align-content: left;
+    display: inline-block;
+    top: 400px;
+    padding: 0px;
+    margin: 0px;
+    text-align: center;
+    font-family: "Arial Black";
+    vertical-align: middle;
+}
+#FightPage {
+    font-size: 36px;
+    color: #fff;
+    align-content: center;
+    text-shadow: 2px 2px 4px #000000;
+    display: none;
+    top: 120px;
+    padding: 0px;
+    margin: 0px;
+    text-align: center;
+    font-family: "Arial Black";
+    vertical-align: top;
+    background-color: #222C63;
+    height: 1400px;
+}
+#ProfilePage {
+    font-size: 36px;
+	color: #fff;
+	text-shadow: 2px 2px 4px #000000;
+    align-content: left;
+    display: none;
+    top: 400px;
+    padding: 0px;
+    margin: 0px;
+    text-align: center;
+    font-family: "Arial Black";
+    vertical-align: middle;
+}
+#RestartPage {
+    font-size: 36px;
+    align-content: center;
+    display: none;
+    top: 400px;
+    padding: 0px;
+    margin: 0px;
+    text-align: center;
+    font-family: "Arial Black";
+    vertical-align: middle;
+	background-color: #fff;
+}
+#AthletePage {
+    font-size: 36px;
+    align-content: center;
+    display: none;
+    top: 400px;
+    padding: 0px;
+    margin: 0px;
+    text-align: center;
+    font-family: "Arial Black";
+    vertical-align: middle;
+	background-color: #fff;
+}
+
+/* styles by CLASS */
+
+
+.banner0{
+	position: absolute;
+	top: 0px;
+	left: 5px;
+	display: inline-block;
+    vertical-align: top;
+	font-size: 14px;
+    text-align: left;
+	}
+.banner1{
+	position: absolute;
+	top: 0px;
+	left: 30%;
+	display: inline-block;
+    vertical-align: top;
+	font-size: 14px;
+    text-align: right;
+	}
+.banner2{
+	position: absolute;
+	top: 0px;
+	right: 5px;
+	display: inline-block;
+    vertical-align: top;
+	font-size: 14px;
+    text-align: left;
+	}
+.container {
+    width: 100%;
+    top: 300px;
+    height: 1200px;
+    left: 0px;
+    position: absolute;
+    margin: 0px;
+    align-content: center;
+	text-align: left;
+    
+}
+.LIcontainer {
+    width: 100%;
+    top: 400px;
+    height: 600px;
+    left: 0px;
+    position: absolute;
+    margin: 0px;
+    align-content: center;
+	text-align: left;
+}
+.name {font-weight: 700}
+
+.description{
+	font-weight: 700
+}
+.gameover {
+    z-index: 15;
+}
+
+.metrics{
+	display:inline-block;
+}
+	
+
+.videoBox{
+    width: 97%;
+    border: 6px solid #706F6F;
+    height: 210px;
+    display: block;
+    background-image: url(static-tv.gif);
+    background-size: 100% 100%;
+	text-shadow: 2px 2px 4px #fff;
+	}
+.box {
+    background-color: #fff;
+    border: #555;
+    border-width: 2px;
+    width: 50px;
+    height: 50px;
+    font-size: 36px;
+    align-content: center;
+    display: inline-block;
+    padding: 10px;
+    margin: 10px;
+    text-align: center;
+    font-family: "Arial Black";
+    vertical-align: middle;
+}
+.box:hover {
+    background-color: coral;
+}
+
+
+.key {
+    border-radius: 10px;
+    border: 2px solid #000;
+    font-size: 28px;
+    background-color: #73AD21;
+    border-width: 3px;
+    width: 35px;
+    height: 45px;
+    align-content: center;
+    display: inline-block;
+    padding: 7px;
+    margin: 7px;
+    text-align: center;
+    font-family: "Arial Black";
+    vertical-align: middle;
+    color: #fff;
+    align-items: center;
+	}
+.results {
+    font-family: Impact, Haettenschweiler, "Franklin Gothic Bold", "Arial Black", "sans-serif";
+    font-size: 36px;
+    visibility: hidden;
+    position: absolute;
+    width: 100%;
+    height: 900px;
+    text-align: center;
+    top: 1%;
+    left: 0px;
+    background-color: #fff;
+    z-index: 10;
+    border-radius: 10px;
+    border: 2px solid #009938;
+}
+
+.Overbox {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: .5;
+    background: #0057e3;
+}
+.overlay {
+    z-index: 9;
+    margin: 30px;
+    background: #009938;
+}
+.reset {
+    border-width: 2px;
+    border-radius: 10px;
+    border: 2px solid #000;
+    width: 200px;
+    height: 60px;
+    margin-left: 5px;
+    margin-top: 20px;
+    padding: 15px;
+    font-family: Impact, Haettenschweiler, "Franklin Gothic Bold", "Arial Black", "sans-serif";
+    font-size: 24px;
+    text-align: center;
+    color: aliceblue;
+    vertical-align: middle;
+    z-index: 10;
+    background-color: #237;
+}
+.reset:hover {
+    border-width: 5px;
+    background-color: #B66264;
+}
+.toolbar{
+    bottom: 50px;
+    background-color: cornflowerblue;
+	}
